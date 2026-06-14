@@ -43,12 +43,278 @@ header {
 
 
 /* ===================================================== */
-/* ÁREA DOS CONTROLES */
+/* ACESSIBILIDADE */
 /* ===================================================== */
 
-.controls {
+.acessibilidade {
 
-    margin: 10px;
+    /* organiza os botões */
+    display: flex;
+
+    /* permite quebrar linha */
+    flex-wrap: wrap;
+
+    /* centraliza os botões */
+    justify-content: center;
+
+    /* alinha os itens */
+    align-items: stretch;
+
+    /* cria espaço entre os botões */
+    gap: 10px;
+
+    /* margem inferior */
+    margin: 0 16px 16px;
+
+}
+
+
+/* ===================================================== */
+/* BLOCO DE ACESSIBILIDADE */
+/* ===================================================== */
+
+.bloco-acessibilidade {
+
+    /* organiza botão e descrição */
+    display: flex;
+
+    /* empilha conteúdo */
+    flex-direction: column;
+
+    /* espaço interno */
+    gap: 6px;
+
+    /* largura do bloco */
+    max-width: 260px;
+
+}
+
+
+/* ===================================================== */
+/* DESCRIÇÃO DE ACESSIBILIDADE */
+/* ===================================================== */
+
+.descricao-acessibilidade {
+
+    /* centraliza o texto */
+    text-align: center;
+
+    /* melhora leitura */
+    line-height: 1.3;
+
+}
+
+
+/* ===================================================== */
+/* CONVITE DE INSTALAÇÃO */
+/* ===================================================== */
+
+.convite-instalacao {
+
+    /* organiza o conteúdo */
+    display: flex;
+
+    /* permite quebrar linha */
+    flex-wrap: wrap;
+
+    /* alinha itens */
+    align-items: center;
+
+    /* distribui os elementos */
+    justify-content: space-between;
+
+    /* espaço entre os elementos */
+    gap: 12px;
+
+    /* largura máxima */
+    max-width: 1120px;
+
+    /* centraliza o convite */
+    margin: 0 auto 16px;
+
+    /* espaço interno */
+    padding: 14px 16px;
+
+    /* fundo verde */
+    background: rgba(76, 175, 80, 0.18);
+
+    /* borda verde */
+    border: 1px solid rgba(76, 175, 80, 0.45);
+
+    /* cantos arredondados */
+    border-radius: 14px;
+
+    /* texto alinhado */
+    text-align: left;
+
+}
+
+
+/* ===================================================== */
+/* TEXTO DO CONVITE */
+/* ===================================================== */
+
+.convite-instalacao p {
+
+    /* margem compacta */
+    margin: 4px 0 0;
+
+}
+
+
+/* ===================================================== */
+/* AÇÕES DE INSTALAÇÃO */
+/* ===================================================== */
+
+.acoes-instalacao {
+
+    /* organiza os botões */
+    display: flex;
+
+    /* permite quebrar linha */
+    flex-wrap: wrap;
+
+    /* espaço entre botões */
+    gap: 8px;
+
+}
+
+
+/* ===================================================== */
+/* ÁREA DO SIMULADOR */
+/* ===================================================== */
+
+.simulador {
+
+    /* organiza os cards */
+    display: grid;
+
+    /* cria colunas responsivas */
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+
+    /* espaço entre os cards */
+    gap: 16px;
+
+    /* largura máxima */
+    max-width: 1120px;
+
+    /* centraliza o conteúdo */
+    margin: 0 auto;
+
+    /* espaçamento lateral */
+    padding: 0 16px;
+
+}
+
+
+/* ===================================================== */
+/* CARDS DOS CONTROLES */
+/* ===================================================== */
+
+.card-controles {
+
+    /* fundo do card */
+    background: rgba(255, 255, 255, 0.08);
+
+    /* borda suave */
+    border: 1px solid rgba(255, 255, 255, 0.12);
+
+    /* cantos arredondados */
+    border-radius: 14px;
+
+    /* espaço interno */
+    padding: 16px;
+
+}
+
+
+/* ===================================================== */
+/* TÍTULOS DOS CARDS */
+/* ===================================================== */
+
+.card-controles h3 {
+
+    /* remove margem superior */
+    margin-top: 0;
+
+    /* margem inferior */
+    margin-bottom: 14px;
+
+}
+
+
+/* ===================================================== */
+/* OPÇÕES DE ORIGEM */
+/* ===================================================== */
+
+.origem-opcoes {
+
+    /* organiza os botões */
+    display: grid;
+
+    /* divide o espaço */
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+
+    /* espaço entre botões */
+    gap: 10px;
+
+    /* margem inferior */
+    margin-bottom: 14px;
+
+}
+
+
+/* ===================================================== */
+/* GRUPOS DE CAMPOS */
+/* ===================================================== */
+
+.grupo-campo {
+
+    /* organiza label e campo */
+    display: flex;
+
+    /* empilha os itens */
+    flex-direction: column;
+
+    /* alinha texto à esquerda */
+    text-align: left;
+
+    /* espaço entre label e campo */
+    gap: 6px;
+
+}
+
+
+/* ===================================================== */
+/* LINHA DE CAMPOS */
+/* ===================================================== */
+
+.linha-campos {
+
+    /* organiza campos lado a lado */
+    display: grid;
+
+    /* cria colunas responsivas */
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+
+    /* espaço entre os campos */
+    gap: 10px;
+
+}
+
+
+/* ===================================================== */
+/* LABELS */
+/* ===================================================== */
+
+label,
+small {
+
+    /* tamanho menor */
+    font-size: 14px;
+
+    /* deixa mais suave */
+    opacity: 0.85;
 
 }
 
@@ -57,23 +323,34 @@ header {
 /* SELECTS E BOTÕES */
 /* ===================================================== */
 
+input,
 select,
 button {
 
     /* espaço interno */
-    padding: 10px;
-
-    /* espaço externo */
-    margin: 5px;
+    padding: 14px 18px;
 
     /* bordas arredondadas */
-    border-radius: 6px;
+    border-radius: 8px;
 
     /* remove borda padrão */
     border: none;
 
     /* tamanho da letra */
-    font-size: 14px;
+    font-size: 16px;
+}
+
+
+/* ===================================================== */
+/* SELECTS */
+/* ===================================================== */
+
+input,
+select {
+
+    /* largura total do grupo */
+    width: 100%;
+
 }
 
 
@@ -91,6 +368,114 @@ button {
 
     /* muda cursor */
     cursor: pointer;
+
+    /* transição suave */
+    transition: 0.2s;
+}
+
+
+/* ===================================================== */
+/* BOTÃO PRINCIPAL */
+/* ===================================================== */
+
+.botao-principal {
+
+    /* largura total */
+    width: 100%;
+
+    /* margem superior */
+    margin-top: 14px;
+
+    /* deixa mais forte */
+    font-weight: bold;
+
+}
+
+
+/* ===================================================== */
+/* OPÇÃO DE ORIGEM */
+/* ===================================================== */
+
+.opcao-origem {
+
+    /* fundo discreto */
+    background: rgba(255, 255, 255, 0.14);
+
+    /* borda transparente */
+    border: 2px solid transparent;
+
+}
+
+
+/* ===================================================== */
+/* OPÇÃO ATIVA */
+/* ===================================================== */
+
+.opcao-origem.ativa {
+
+    /* cor verde */
+    background: #4CAF50;
+
+    /* borda clara */
+    border-color: rgba(255, 255, 255, 0.75);
+
+}
+
+
+/* ===================================================== */
+/* BOTÃO DESABILITADO */
+/* ===================================================== */
+
+button:disabled {
+
+    /* cor cinza */
+    background: #777;
+
+    /* reduz destaque */
+    opacity: 0.6;
+
+    /* bloqueia cursor */
+    cursor: not-allowed;
+}
+
+
+/* ===================================================== */
+/* BOTÃO AO PASSAR O MOUSE */
+/* ===================================================== */
+
+button:not(:disabled):hover {
+
+    /* escurece um pouco */
+    filter: brightness(0.92);
+
+}
+
+
+/* ===================================================== */
+/* FOCO PELO TECLADO */
+/* ===================================================== */
+
+button:focus-visible,
+select:focus-visible {
+
+    /* destaque forte para navegação por teclado */
+    outline: 4px solid #ffeb3b;
+
+    /* afasta o contorno */
+    outline-offset: 3px;
+
+}
+
+
+/* ===================================================== */
+/* ELEMENTOS OCULTOS */
+/* ===================================================== */
+
+.oculto {
+
+    /* esconde da tela */
+    display: none;
+
 }
 
 
@@ -100,7 +485,7 @@ button {
 
 #painel {
 
-    margin-top: 10px;
+    margin-top: 14px;
 
     font-size: 16px;
 }
@@ -133,4 +518,263 @@ footer {
 
     /* deixa o texto mais suave */
     opacity: 0.7;
+}
+
+
+/* ===================================================== */
+/* CRÉDITOS */
+/* ===================================================== */
+
+.creditos {
+
+    /* largura máxima */
+    max-width: 900px;
+
+    /* centraliza o rodapé */
+    margin: 20px auto 10px;
+
+    /* espaço interno */
+    padding: 18px;
+
+    /* fundo discreto */
+    background: rgba(255, 255, 255, 0.08);
+
+    /* borda suave */
+    border: 1px solid rgba(255, 255, 255, 0.12);
+
+    /* cantos arredondados */
+    border-radius: 14px;
+
+    /* mantém boa leitura */
+    opacity: 1;
+
+}
+
+
+/* ===================================================== */
+/* TÍTULO DOS CRÉDITOS */
+/* ===================================================== */
+
+.creditos h3 {
+
+    /* remove margem superior */
+    margin-top: 0;
+
+}
+
+
+/* ===================================================== */
+/* TEXTOS DOS CRÉDITOS */
+/* ===================================================== */
+
+.creditos p {
+
+    /* margem compacta */
+    margin: 8px 0;
+
+}
+
+
+/* ===================================================== */
+/* LISTA DE ESTUDANTES */
+/* ===================================================== */
+
+.creditos ul {
+
+    /* remove marcadores */
+    list-style: none;
+
+    /* remove recuo padrão */
+    padding: 0;
+
+    /* margem da lista */
+    margin: 8px 0 14px;
+
+}
+
+
+/* ===================================================== */
+/* ITENS DA LISTA */
+/* ===================================================== */
+
+.creditos li {
+
+    /* espaço entre nomes */
+    margin: 4px 0;
+
+}
+
+
+/* ===================================================== */
+/* MODO ALTO CONTRASTE */
+/* ===================================================== */
+
+body.alto-contraste {
+
+    /* fundo preto */
+    background: #000;
+
+    /* texto branco */
+    color: #fff;
+
+}
+
+
+/* ===================================================== */
+/* CARDS NO ALTO CONTRASTE */
+/* ===================================================== */
+
+body.alto-contraste .card-controles {
+
+    /* fundo preto */
+    background: #000;
+
+    /* borda amarela */
+    border: 3px solid #ffeb3b;
+
+}
+
+
+/* ===================================================== */
+/* CAMPOS NO ALTO CONTRASTE */
+/* ===================================================== */
+
+body.alto-contraste select,
+body.alto-contraste input,
+body.alto-contraste button {
+
+    /* fundo preto */
+    background: #000;
+
+    /* texto amarelo */
+    color: #ffeb3b;
+
+    /* borda amarela */
+    border: 2px solid #ffeb3b;
+
+}
+
+
+/* ===================================================== */
+/* BOTÃO ATIVO NO ALTO CONTRASTE */
+/* ===================================================== */
+
+body.alto-contraste .opcao-origem.ativa,
+body.alto-contraste .botao-principal {
+
+    /* fundo amarelo */
+    background: #ffeb3b;
+
+    /* texto preto */
+    color: #000;
+
+}
+
+
+/* ===================================================== */
+/* MAPA NO ALTO CONTRASTE */
+/* ===================================================== */
+
+body.alto-contraste #map {
+
+    /* borda amarela */
+    border: 3px solid #ffeb3b;
+
+}
+
+
+/* ===================================================== */
+/* TEXTOS AUXILIARES NO ALTO CONTRASTE */
+/* ===================================================== */
+
+body.alto-contraste label,
+body.alto-contraste small,
+body.alto-contraste footer {
+
+    /* remove transparência */
+    opacity: 1;
+
+}
+
+
+/* ===================================================== */
+/* MODO CALMO */
+/* ===================================================== */
+
+body.modo-calmo {
+
+    /* fundo azul suave */
+    background: #243447;
+
+    /* texto claro */
+    color: #f4f7fb;
+
+}
+
+
+/* ===================================================== */
+/* CARDS NO MODO CALMO */
+/* ===================================================== */
+
+body.modo-calmo .card-controles {
+
+    /* fundo mais suave */
+    background: rgba(255, 255, 255, 0.06);
+
+    /* borda discreta */
+    border-color: rgba(255, 255, 255, 0.18);
+
+}
+
+
+/* ===================================================== */
+/* BOTÕES NO MODO CALMO */
+/* ===================================================== */
+
+body.modo-calmo button {
+
+    /* verde mais suave */
+    background: #5b8c7a;
+
+}
+
+
+/* ===================================================== */
+/* OPÇÃO ATIVA NO MODO CALMO */
+/* ===================================================== */
+
+body.modo-calmo .opcao-origem.ativa {
+
+    /* destaque sem excesso */
+    background: #6f9f8d;
+
+    /* borda suave */
+    border-color: rgba(255, 255, 255, 0.55);
+
+}
+
+
+/* ===================================================== */
+/* MAPA NO MODO CALMO */
+/* ===================================================== */
+
+body.modo-calmo #map {
+
+    /* reduz intensidade visual do mapa */
+    filter: saturate(0.65) brightness(0.92);
+
+}
+
+
+/* ===================================================== */
+/* MOVIMENTOS NO MODO CALMO */
+/* ===================================================== */
+
+body.modo-calmo *,
+body.modo-calmo *::before,
+body.modo-calmo *::after {
+
+    /* remove transições para evitar estímulos */
+    transition: none !important;
+
 }

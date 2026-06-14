@@ -8,11 +8,15 @@
 // CARREGA AS VOZES DO NAVEGADOR
 // ======================================================
 
-speechSynthesis.onvoiceschanged = () => {
+if ("speechSynthesis" in window) {
 
-    speechSynthesis.getVoices();
+    speechSynthesis.onvoiceschanged = () => {
 
-};
+        speechSynthesis.getVoices();
+
+    };
+
+}
 
 
 // ======================================================
@@ -26,6 +30,18 @@ let timeoutDestino = null;
 let linha = null;
 
 let marcador = null;
+
+let localizacaoAtual = null;
+
+let marcadorLocalizacao = null;
+
+let modoOrigem = "ponto";
+
+let temporizadoresVoz = [];
+
+let ultimaSugestaoTransporte = "";
+
+let eventoInstalacaoPwa = null;
 
 
 // ======================================================
@@ -50,7 +66,7 @@ const rotaTurismo = [
     "Parque São Lourenço",
     "Ópera de Arame",
     "Parque Tanguá",
-    "Parque Tinguí",
+    "Parque Tingui",
     "Santa Felicidade",
     "Parque Barigui",
     "Torre Panorâmica",
@@ -81,7 +97,7 @@ const pontos = {
     "Parque São Lourenço": [-25.399, -49.268],
     "Ópera de Arame": [-25.407, -49.276],
     "Parque Tanguá": [-25.379, -49.275],
-    "Parque Tinguí": [-25.392, -49.298],
+    "Parque Tingui": [-25.392, -49.298],
     "Santa Felicidade": [-25.403, -49.331],
     "Parque Barigui": [-25.425, -49.308],
     "Torre Panorâmica": [-25.416, -49.291],
@@ -91,10 +107,475 @@ const pontos = {
 
 
 // ======================================================
+// ELEMENTOS DA TELA
+// ======================================================
+
+const btnModoPontoEl = document.getElementById("btnModoPonto");
+
+const btnModoLocalizacaoEl = document.getElementById("btnModoLocalizacao");
+
+const grupoOrigemEl = document.getElementById("grupoOrigem");
+
+const grupoLocalizacaoEl = document.getElementById("grupoLocalizacao");
+
+const statusLocalizacaoEl = document.getElementById("statusLocalizacao");
+
+const conviteInstalacaoEl = document.getElementById("conviteInstalacao");
+
+const btnInstalarAppEl = document.getElementById("btnInstalarApp");
+
+const btnFecharInstalacaoEl = document.getElementById("btnFecharInstalacao");
+
+const btnContrasteEl = document.getElementById("btnContraste");
+
+const btnLeituraEl = document.getElementById("btnLeitura");
+
+const btnModoCalmoEl = document.getElementById("btnModoCalmo");
+
+const origemEl = document.getElementById("origem");
+
+const destinoEl = document.getElementById("destino");
+
+const transporteEl = document.getElementById("transporte");
+
+const grupoCombustivelEl = document.getElementById("grupoCombustivel");
+
+const precoCombustivelEl = document.getElementById("precoCombustivel");
+
+const grupoPassagemEl = document.getElementById("grupoPassagem");
+
+const valorPassagemEl = document.getElementById("valorPassagem");
+
+const climaEl = document.getElementById("clima");
+
+const btnLocalizacaoEl = document.getElementById("btnLocalizacao");
+
+const btnSimularEl = document.getElementById("btnSimular");
+
+const resultadoEl = document.getElementById("resultado");
+
+const chaveContraste = "mobilidadeAltoContraste";
+
+const chaveModoCalmo = "mobilidadeModoCalmo";
+
+const chaveConviteInstalacao = "mobilidadeConviteInstalacaoFechado";
+
+
+// ======================================================
+// REGISTRA O SERVICE WORKER
+// ======================================================
+
+if ("serviceWorker" in navigator) {
+
+    window.addEventListener("load", () => {
+
+        navigator.serviceWorker.register("sw.js")
+            .catch(() => {
+
+                console.warn("Não foi possível registrar o service worker.");
+
+            });
+
+    });
+
+}
+
+
+// ======================================================
+// VERIFICA SE O APP JÁ ESTÁ INSTALADO
+// ======================================================
+
+function appJaInstalado() {
+
+    const modoStandalone =
+        window.matchMedia("(display-mode: standalone)").matches;
+
+    const modoIos =
+        window.navigator.standalone === true;
+
+    return modoStandalone || modoIos;
+
+}
+
+
+// ======================================================
+// MOSTRA CONVITE PARA INSTALAR O APP
+// ======================================================
+
+function mostrarConviteInstalacao() {
+
+    if (appJaInstalado()) return;
+
+    if (localStorage.getItem(chaveConviteInstalacao) === "true") return;
+
+    conviteInstalacaoEl.classList.remove("oculto");
+
+}
+
+
+// ======================================================
+// ESCONDE CONVITE PARA INSTALAR O APP
+// ======================================================
+
+function esconderConviteInstalacao() {
+
+    conviteInstalacaoEl.classList.add("oculto");
+
+}
+
+
+// ======================================================
+// EVENTO DE INSTALAÇÃO DO PWA
+// ======================================================
+
+window.addEventListener("beforeinstallprompt", event => {
+
+    event.preventDefault();
+
+    eventoInstalacaoPwa = event;
+
+    mostrarConviteInstalacao();
+
+});
+
+
+// ======================================================
+// BOTÃO INSTALAR APP
+// ======================================================
+
+btnInstalarAppEl.onclick = async function () {
+
+    if (!eventoInstalacaoPwa) {
+
+        resultadoEl.textContent =
+            "Se o navegador permitir, use a opção instalar aplicativo no menu.";
+
+        return;
+
+    }
+
+
+    eventoInstalacaoPwa.prompt();
+
+    await eventoInstalacaoPwa.userChoice;
+
+    eventoInstalacaoPwa = null;
+
+    esconderConviteInstalacao();
+
+};
+
+
+// ======================================================
+// BOTÃO FECHAR CONVITE
+// ======================================================
+
+btnFecharInstalacaoEl.onclick = function () {
+
+    localStorage.setItem(chaveConviteInstalacao, "true");
+
+    esconderConviteInstalacao();
+
+};
+
+
+// ======================================================
+// APP INSTALADO
+// ======================================================
+
+window.addEventListener("appinstalled", () => {
+
+    eventoInstalacaoPwa = null;
+
+    esconderConviteInstalacao();
+
+});
+
+
+// ======================================================
+// CONVITE AO ABRIR A PÁGINA
+// ======================================================
+
+window.addEventListener("load", () => {
+
+    setTimeout(() => {
+
+        mostrarConviteInstalacao();
+
+    }, 1200);
+
+});
+
+
+// ======================================================
+// APLICA O ALTO CONTRASTE
+// ======================================================
+
+function aplicarAltoContraste(ativo) {
+
+    document.body.classList.toggle("alto-contraste", ativo);
+
+    btnContrasteEl.setAttribute("aria-pressed", String(ativo));
+
+
+    if (ativo) {
+
+        btnContrasteEl.textContent = "◐ Desativar alto contraste";
+
+        return;
+
+    }
+
+
+    btnContrasteEl.textContent = "◐ Alto contraste";
+
+}
+
+
+// ======================================================
+// ALTERNA O ALTO CONTRASTE
+// ======================================================
+
+function alternarAltoContraste() {
+
+    const ativo =
+        !document.body.classList.contains("alto-contraste");
+
+
+    aplicarAltoContraste(ativo);
+
+    try {
+
+        localStorage.setItem(chaveContraste, String(ativo));
+
+    } catch (erro) {
+
+        console.warn("Não foi possível salvar a preferência de contraste.");
+
+    }
+
+
+    if (ativo) {
+
+        falar("Alto contraste ativado.");
+
+        return;
+
+    }
+
+
+    falar("Alto contraste desativado.");
+
+}
+
+
+// ======================================================
+// CARREGA PREFERÊNCIA DE CONTRASTE
+// ======================================================
+
+function carregarPreferenciaContraste() {
+
+    try {
+
+        const ativo =
+            localStorage.getItem(chaveContraste) === "true";
+
+        aplicarAltoContraste(ativo);
+
+    } catch (erro) {
+
+        aplicarAltoContraste(false);
+
+    }
+
+}
+
+
+// ======================================================
+// APLICA O MODO CALMO
+// ======================================================
+
+function aplicarModoCalmo(ativo) {
+
+    document.body.classList.toggle("modo-calmo", ativo);
+
+    btnModoCalmoEl.setAttribute("aria-pressed", String(ativo));
+
+
+    if (ativo) {
+
+        btnModoCalmoEl.textContent = "🧩 Desativar modo calmo";
+
+        return;
+
+    }
+
+
+    btnModoCalmoEl.textContent = "🧩 Modo calmo";
+
+}
+
+
+// ======================================================
+// VERIFICA SE O MODO CALMO ESTÁ ATIVO
+// ======================================================
+
+function modoCalmoAtivo() {
+
+    return document.body.classList.contains("modo-calmo");
+
+}
+
+
+// ======================================================
+// ALTERNA O MODO CALMO
+// ======================================================
+
+function alternarModoCalmo() {
+
+    const ativo =
+        !modoCalmoAtivo();
+
+
+    aplicarModoCalmo(ativo);
+
+
+    try {
+
+        localStorage.setItem(chaveModoCalmo, String(ativo));
+
+    } catch (erro) {
+
+        console.warn("Não foi possível salvar a preferência do modo calmo.");
+
+    }
+
+
+    if (ativo) {
+
+        falar("Modo calmo ativado.");
+
+        return;
+
+    }
+
+
+    falar("Modo calmo desativado.");
+
+}
+
+
+// ======================================================
+// CARREGA PREFERÊNCIA DO MODO CALMO
+// ======================================================
+
+function carregarPreferenciaModoCalmo() {
+
+    try {
+
+        const ativo =
+            localStorage.getItem(chaveModoCalmo) === "true";
+
+        aplicarModoCalmo(ativo);
+
+    } catch (erro) {
+
+        aplicarModoCalmo(false);
+
+    }
+
+}
+
+
+// ======================================================
+// MONTA TEXTO PARA LEITURA DA TELA
+// ======================================================
+
+function montarTextoLeitura() {
+
+    const origemTexto =
+        modoOrigem === "localizacao"
+            ? "sua localização atual"
+            : origemEl.value;
+
+    const combustivelTexto =
+        transporteEl.value === "Carro"
+            ? `Preço do combustível: ${precoCombustivelEl.value} reais por litro.`
+            : "";
+
+    const passagemTexto =
+        transporteEl.value === "Ônibus"
+            ? `Valor da passagem: ${valorPassagemEl.value} reais.`
+            : "";
+
+
+    return `
+        Mobilidade Inteligente Curitiba.
+        Este simulador permite calcular uma rota turística.
+        Primeiro escolha se deseja sair de um ponto turístico ou da sua localização atual.
+        Origem selecionada: ${origemTexto}.
+        Destino selecionado: ${destinoEl.value}.
+        Transporte selecionado: ${transporteEl.value}.
+        ${combustivelTexto}
+        ${passagemTexto}
+        Clima selecionado: ${climaEl.value}.
+        ${ultimaSugestaoTransporte}
+        Para iniciar, pressione o botão Simular rota.
+        Você também pode ativar o VLibras pelo botão flutuante da página.
+    `;
+
+}
+
+
+// ======================================================
+// LÊ AS INSTRUÇÕES DA TELA
+// ======================================================
+
+function lerInstrucoesTela() {
+
+    falar(montarTextoLeitura());
+
+}
+
+
+// ======================================================
+// BOTÃO ALTO CONTRASTE
+// ======================================================
+
+btnContrasteEl.onclick = function () {
+
+    alternarAltoContraste();
+
+};
+
+
+// ======================================================
+// BOTÃO LER INSTRUÇÕES
+// ======================================================
+
+btnLeituraEl.onclick = function () {
+
+    lerInstrucoesTela();
+
+};
+
+
+// ======================================================
+// BOTÃO MODO CALMO
+// ======================================================
+
+btnModoCalmoEl.onclick = function () {
+
+    alternarModoCalmo();
+
+};
+
+
+// ======================================================
 //  CRIAÇÃO DO MAPA
 // ======================================================
 
-const map = L.map('map').setView([-25.43, -49.27], 13);
+const map = L.map("map").setView([-25.43, -49.27], 13);
 
 
 // ======================================================
@@ -103,10 +584,10 @@ const map = L.map('map').setView([-25.43, -49.27], 13);
 
 L.tileLayer(
 
-'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
+"https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
 
 {
-    attribution: '© OpenStreetMap © CARTO'
+    attribution: "© OpenStreetMap © CARTO"
 }
 
 ).addTo(map);
@@ -129,18 +610,255 @@ Object.keys(pontos).forEach(nome => {
 // SELECTS
 // ======================================================
 
-const origemEl = document.getElementById("origem");
-
-const destinoEl = document.getElementById("destino");
-
-
 rotaTurismo.forEach(ponto => {
 
-    origemEl.innerHTML += `<option>${ponto}</option>`;
+    const opcaoOrigem = document.createElement("option");
 
-    destinoEl.innerHTML += `<option>${ponto}</option>`;
+    opcaoOrigem.value = ponto;
+
+    opcaoOrigem.textContent = ponto;
+
+    origemEl.appendChild(opcaoOrigem);
+
+
+    const opcaoDestino = document.createElement("option");
+
+    opcaoDestino.value = ponto;
+
+    opcaoDestino.textContent = ponto;
+
+    destinoEl.appendChild(opcaoDestino);
 
 });
+
+
+// ======================================================
+// ATUALIZA O MODO DE ORIGEM
+// ======================================================
+
+function atualizarModoOrigem() {
+
+    const usandoPonto =
+        modoOrigem === "ponto";
+
+
+    btnModoPontoEl.classList.toggle("ativa", usandoPonto);
+
+    btnModoLocalizacaoEl.classList.toggle("ativa", !usandoPonto);
+
+    grupoOrigemEl.classList.toggle("oculto", !usandoPonto);
+
+    grupoLocalizacaoEl.classList.toggle("oculto", usandoPonto);
+
+
+    if (usandoPonto) {
+
+        btnSimularEl.disabled = false;
+
+        resultadoEl.textContent =
+            "Escolha um ponto de origem e um destino.";
+
+        return;
+
+    }
+
+
+    if (localizacaoAtual) {
+
+        btnSimularEl.disabled = false;
+
+        btnLocalizacaoEl.textContent = "Atualizar minha localização";
+
+        statusLocalizacaoEl.textContent =
+            "Localização ativa. Agora escolha o destino e simule.";
+
+        resultadoEl.textContent =
+            "Sua localização será usada como origem da rota.";
+
+        return;
+
+    }
+
+
+    btnSimularEl.disabled = true;
+
+    btnLocalizacaoEl.disabled = false;
+
+    btnLocalizacaoEl.textContent = "Liberar minha localização";
+
+    statusLocalizacaoEl.textContent =
+        "Clique no botão para permitir o uso da localização.";
+
+    resultadoEl.textContent =
+        "Libere sua localização para simular saindo de onde você está.";
+
+}
+
+
+// ======================================================
+// ATUALIZA CAMPOS DE CUSTO
+// ======================================================
+
+function atualizarCamposCusto() {
+
+    const usandoCarro =
+        transporteEl.value === "Carro";
+
+    const usandoOnibus =
+        transporteEl.value === "Ônibus";
+
+
+    grupoCombustivelEl.classList.toggle("oculto", !usandoCarro);
+
+    grupoPassagemEl.classList.toggle("oculto", !usandoOnibus);
+
+}
+
+
+// ======================================================
+// TRANSPORTE
+// ======================================================
+
+transporteEl.onchange = function () {
+
+    atualizarCamposCusto();
+
+};
+
+
+// ======================================================
+// GEOLOCALIZAÇÃO DO USUÁRIO
+// ======================================================
+
+function usarLocalizacaoAtual() {
+
+    if (!navigator.geolocation) {
+
+        resultadoEl.textContent =
+            "Geolocalização não disponível neste navegador.";
+
+        return;
+
+    }
+
+
+    btnLocalizacaoEl.disabled = true;
+
+    btnSimularEl.disabled = true;
+
+    statusLocalizacaoEl.textContent =
+        "Buscando sua posição...";
+
+    resultadoEl.textContent =
+        "Buscando sua localização atual...";
+
+
+    navigator.geolocation.getCurrentPosition(
+
+        posicao => {
+
+            localizacaoAtual = [
+                posicao.coords.latitude,
+                posicao.coords.longitude
+            ];
+
+
+            if (marcadorLocalizacao) {
+
+                map.removeLayer(marcadorLocalizacao);
+
+            }
+
+
+            marcadorLocalizacao = L.marker(localizacaoAtual)
+                .addTo(map)
+                .bindPopup("Você está aqui")
+                .openPopup();
+
+
+            map.setView(localizacaoAtual, 15);
+
+            btnLocalizacaoEl.disabled = false;
+
+            atualizarModoOrigem();
+
+        },
+
+        erro => {
+
+            let mensagem = "Não foi possível obter sua localização.";
+
+            if (erro.code === erro.PERMISSION_DENIED) {
+
+                mensagem = "Permissão de localização negada.";
+
+            }
+
+            if (erro.code === erro.POSITION_UNAVAILABLE) {
+
+                mensagem = "Localização indisponível no momento.";
+
+            }
+
+            if (erro.code === erro.TIMEOUT) {
+
+                mensagem = "Tempo esgotado ao buscar localização.";
+
+            }
+
+
+            btnLocalizacaoEl.disabled = false;
+
+            btnSimularEl.disabled = true;
+
+            statusLocalizacaoEl.textContent = mensagem;
+
+            resultadoEl.textContent = mensagem;
+
+        },
+
+        {
+            enableHighAccuracy: true,
+            timeout: 10000,
+            maximumAge: 0
+        }
+
+    );
+
+}
+
+
+// ======================================================
+// BOTÕES DO MODO DE ORIGEM
+// ======================================================
+
+btnModoPontoEl.onclick = function () {
+
+    modoOrigem = "ponto";
+
+    atualizarModoOrigem();
+
+};
+
+
+btnModoLocalizacaoEl.onclick = function () {
+
+    modoOrigem = "localizacao";
+
+    atualizarModoOrigem();
+
+};
+
+
+// ======================================================
+// BOTÃO LOCALIZAÇÃO
+// ======================================================
+
+btnLocalizacaoEl.onclick = function () {
+
+    usarLocalizacaoAtual();
+
+};
 
 
 // ======================================================
@@ -149,7 +867,13 @@ rotaTurismo.forEach(ponto => {
 
 function falar(texto) {
 
-    if (speechSynthesis.speaking) return;
+    if (!("speechSynthesis" in window)) return;
+
+    if (speechSynthesis.speaking) {
+
+        speechSynthesis.cancel();
+
+    }
 
     const msg = new SpeechSynthesisUtterance(texto);
 
@@ -171,6 +895,12 @@ function falar(texto) {
 
     );
 
+    const vozPortugues = vozes.find(
+
+        voz => voz.lang === "pt-BR" || voz.lang === "pt-PT"
+
+    );
+
 
     if (vozGoogle) {
 
@@ -178,7 +908,94 @@ function falar(texto) {
 
     }
 
+    if (!vozGoogle && vozPortugues) {
+
+        msg.voice = vozPortugues;
+
+    }
+
     speechSynthesis.speak(msg);
+
+}
+
+
+// ======================================================
+// VERIFICA SE A VOZ ESTÁ FALANDO
+// ======================================================
+
+function vozEstaFalando() {
+
+    if (!("speechSynthesis" in window)) return false;
+
+    return speechSynthesis.speaking;
+
+}
+
+
+// ======================================================
+// FALA APÓS UM TEMPO
+// ======================================================
+
+function falarDepois(texto, tempo) {
+
+    const temporizador = setTimeout(() => {
+
+        falar(texto);
+
+    }, tempo);
+
+
+    temporizadoresVoz.push(temporizador);
+
+}
+
+
+// ======================================================
+// MENSAGEM INICIAL DA ROTA
+// ======================================================
+
+function anunciarInicioRota(transporte, destino) {
+
+    if (modoCalmoAtivo()) return;
+
+    if (transporte === "Carro") {
+
+        falar("Bem vindo ao simulador de mobilidade urbana.");
+
+        falarDepois("Utilize o cinto de segurança.", 3000);
+
+    }
+
+
+    if (transporte === "Bicicleta") {
+
+        falar("Bem vindo ao simulador de mobilidade urbana.");
+
+        falarDepois("Utilize capacete ao pedalar.", 3000);
+
+        falarDepois("Você escolheu um transporte sustentável.", 6000);
+
+    }
+
+
+    if (transporte === "Ônibus") {
+
+        falar("Bem vindo à linha turismo de Curitiba.");
+
+        falarDepois("Próximo destino " + destino, 3500);
+
+    }
+
+
+    if (transporte === "A pé") {
+
+        falar("Bem vindo ao simulador.");
+
+        falarDepois("Atenção ao atravessar as ruas.", 3000);
+
+        falarDepois("Você escolheu um transporte sustentável.", 6000);
+
+    }
 
 }
 
@@ -195,6 +1012,148 @@ const velocidades = {
     "A pé": 5
 
 };
+
+
+// ======================================================
+// CONSUMO MÉDIO DO CARRO
+// ======================================================
+
+const consumoMedioCarroKmPorLitro = 10;
+
+
+// ======================================================
+// TARIFA ESTIMADA DO ÔNIBUS
+// ======================================================
+
+const tarifaOnibusEstimativa = 6;
+
+
+// ======================================================
+// FATOR MÉDIO DE TRÂNSITO PARA COMPARAÇÃO
+// ======================================================
+
+const fatorTransitoMedio = 1.3;
+
+
+// ======================================================
+// SUGESTÃO DE MELHOR TRANSPORTE
+// ======================================================
+
+function sugerirMelhorTransporte(
+    distanciaKm,
+    clima,
+    precoCombustivel,
+    valorPassagem
+) {
+
+    const opcoes = [
+
+        {
+            icone: "🚶",
+            transporte: "A pé",
+            velocidade: velocidades["A pé"],
+            custo: 0,
+            sustentabilidade: 10,
+            limiteConforto: 3
+        },
+
+        {
+            icone: "🚴",
+            transporte: "Bicicleta",
+            velocidade: velocidades["Bicicleta"],
+            custo: 0,
+            sustentabilidade: 9,
+            limiteConforto: 8
+        },
+
+        {
+            icone: "🚌",
+            transporte: "Ônibus",
+            velocidade: velocidades["Ônibus"],
+            custo: valorPassagem,
+            sustentabilidade: 7,
+            limiteConforto: 25
+        },
+
+        {
+            icone: "🚗",
+            transporte: "Carro",
+            velocidade: velocidades["Carro"],
+            custo: (distanciaKm / consumoMedioCarroKmPorLitro) * precoCombustivel,
+            sustentabilidade: 3,
+            limiteConforto: 999
+        }
+
+    ];
+
+
+    const avaliadas = opcoes.map(opcao => {
+
+        const fatorClimaOpcao =
+            fatorClima(clima, opcao.transporte);
+
+        const fatorTransitoOpcao =
+            opcao.transporte === "Carro" || opcao.transporte === "Ônibus"
+                ? fatorTransitoMedio
+                : 1;
+
+        const tempoHoras =
+            distanciaKm / (opcao.velocidade * fatorClimaOpcao / fatorTransitoOpcao);
+
+        const tempoMinutos =
+            tempoHoras * 60;
+
+        const penalidadeDistancia =
+            distanciaKm > opcao.limiteConforto
+                ? (distanciaKm - opcao.limiteConforto) * 8
+                : 0;
+
+        const bonusCurtaDistancia =
+            distanciaKm <= 1.5 && opcao.transporte === "A pé"
+                ? -25
+                : distanciaKm <= 6 && opcao.transporte === "Bicicleta"
+                    ? -18
+                    : 0;
+
+        const penalidadeChuva =
+            clima === "Chuva" &&
+            (opcao.transporte === "A pé" || opcao.transporte === "Bicicleta")
+                ? 18
+                : 0;
+
+        const pontuacao =
+            tempoMinutos * 0.45 +
+            opcao.custo * 2 +
+            (10 - opcao.sustentabilidade) * 5 +
+            penalidadeDistancia +
+            penalidadeChuva +
+            bonusCurtaDistancia;
+
+
+        return {
+            ...opcao,
+            tempoMinutos,
+            pontuacao
+        };
+
+    });
+
+
+    avaliadas.sort((a, b) => a.pontuacao - b.pontuacao);
+
+
+    const melhor =
+        avaliadas[0];
+
+
+    return {
+        icone: melhor.icone,
+        transporte: melhor.transporte,
+        motivo:
+            `melhor equilíbrio entre tempo, custo, clima e sustentabilidade; tempo estimado ${Math.round(melhor.tempoMinutos)} min`
+    };
+
+}
 
 
 // ======================================================
@@ -256,6 +1215,8 @@ function iconeTransporte(t) {
     if (t === "Ônibus") return "🚌";
 
     if (t === "A pé") return "🚶";
+
+    return "📍";
 
 }
 
@@ -337,16 +1298,18 @@ function fraseSeguranca(transporte) {
 
 
 // ======================================================
-// BOTÃO SIMULAR
+// LIMPA SIMULAÇÃO ANTERIOR
 // ======================================================
 
-document.getElementById("btnSimular").onclick = async function () {
+function limparSimulacaoAnterior() {
 
-    // limpa voz anterior
-    speechSynthesis.cancel();
+    if ("speechSynthesis" in window) {
+
+        speechSynthesis.cancel();
+
+    }
 
 
-    // limpa animação anterior
     if (intervaloAtual) {
 
         clearInterval(intervaloAtual);
@@ -354,7 +1317,6 @@ document.getElementById("btnSimular").onclick = async function () {
     }
 
 
-    // limpa timeout
     if (timeoutDestino) {
 
         clearTimeout(timeoutDestino);
@@ -362,7 +1324,16 @@ document.getElementById("btnSimular").onclick = async function () {
     }
 
 
-    // remove marcador antigo
+    temporizadoresVoz.forEach(temporizador => {
+
+        clearTimeout(temporizador);
+
+    });
+
+
+    temporizadoresVoz = [];
+
+
     if (marcador) {
 
         map.removeLayer(marcador);
@@ -370,12 +1341,40 @@ document.getElementById("btnSimular").onclick = async function () {
     }
 
 
-    // remove rota antiga
     if (linha) {
 
         map.removeLayer(linha);
 
     }
+
+}
+
+
+// ======================================================
+// BUSCA COORDENADA DA ORIGEM
+// ======================================================
+
+function buscarCoordenadaOrigem() {
+
+    if (modoOrigem === "localizacao") {
+
+        return localizacaoAtual;
+
+    }
+
+    return pontos[origemEl.value];
+
+}
+
+
+// ======================================================
+// BOTÃO SIMULAR
+// ======================================================
+
+btnSimularEl.onclick = async function () {
+
+    // limpa simulação anterior
+    limparSimulacaoAnterior();
 
 
     // ==================================================
@@ -386,80 +1385,60 @@ document.getElementById("btnSimular").onclick = async function () {
 
     const destino = destinoEl.value;
 
-    const transporte =
-        document.getElementById("transporte").value;
+    const transporte = transporteEl.value;
 
-    const clima =
-        document.getElementById("clima").value;
+    const clima = climaEl.value;
 
-
-    // ==================================================
-    // MENSAGENS INICIAIS
-    // ==================================================
-
-    setTimeout(() => {
-
-        if (transporte === "Carro") {
-
-            falar("Bem vindo ao simulador de mobilidade urbana.");
-
-            setTimeout(() => {
-
-                falar("Utilize o cinto de segurança.");
-
-            }, 3000);
-
-        }
-
-
-        if (transporte === "Bicicleta") {
-
-            falar("Bem vindo ao simulador de mobilidade urbana.");
-
-            setTimeout(() => {
-
-                falar("Utilize capacete ao pedalar.");
-
-            }, 3000);
-
-        }
-
-
-        if (transporte === "Ônibus") {
-
-            falar("Bem vindo à linha turismo de Curitiba.");
-
-            setTimeout(() => {
-
-                falar("Próximo destino " + destino);
-
-            }, 3500);
-
-        }
-
-
-        if (transporte === "A pé") {
-
-            falar("Bem vindo ao simulador.");
-
-            setTimeout(() => {
-
-                falar("Atenção ao atravessar as ruas.");
-
-            }, 3000);
-
-        }
-
-    }, 500);
+    const usandoLocalizacao =
+        modoOrigem === "localizacao";
 
 
     // ==================================================
     // COORDENADAS
     // ==================================================
 
-    const c1 = pontos[origem];
+    const c1 = buscarCoordenadaOrigem();
 
     const c2 = pontos[destino];
+
+
+    if (usandoLocalizacao && !localizacaoAtual) {
+
+        resultadoEl.textContent =
+            "Libere sua localização antes de simular.";
+
+        atualizarModoOrigem();
+
+        return;
+
+    }
+
+
+    if (!usandoLocalizacao && origem === destino) {
+
+        resultadoEl.textContent =
+            "Escolha pontos diferentes para origem e destino.";
+
+        return;
+
+    }
+
+
+    if (!c1 || !c2) {
+
+        resultadoEl.textContent =
+            "Origem ou destino inválido.";
+
+        return;
+
+    }
+
+
+    // ==================================================
+    // MENSAGENS INICIAIS
+    // ==================================================
+
+    anunciarInicioRota(transporte, destino);
 
 
     // ==================================================
@@ -469,9 +1448,38 @@ document.getElementById("btnSimular").onclick = async function () {
     const url =
 `https://router.project-osrm.org/route/v1/driving/${c1[1]},${c1[0]};${c2[1]},${c2[0]}?overview=full&geometries=geojson`;
 
-    const res = await fetch(url);
 
-    const data = await res.json();
+    resultadoEl.textContent =
+        "Calculando rota...";
+
+
+    let data = null;
+
+
+    try {
+
+        const res = await fetch(url);
+
+        data = await res.json();
+
+    } catch (erro) {
+
+        resultadoEl.textContent =
+            "Não foi possível conectar ao serviço de rotas.";
+
+        return;
+
+    }
+
+
+    if (!data.routes || !data.routes[0]) {
+
+        resultadoEl.textContent =
+            "Não foi possível encontrar uma rota para esse trajeto.";
+
+        return;
+
+    }
 
 
     // ==================================================
@@ -564,7 +1572,11 @@ document.getElementById("btnSimular").onclick = async function () {
         // evita erro final
         if (!coords[i]) {
 
-            falar("Você chegou ao destino.");
+            if (!modoCalmoAtivo()) {
+
+                falar("Você chegou ao destino.");
+
+            }
 
             clearInterval(intervaloAtual);
 
@@ -589,7 +1601,7 @@ document.getElementById("btnSimular").onclick = async function () {
 
         ) {
 
-            if (!speechSynthesis.speaking) {
+            if (!modoCalmoAtivo() && !vozEstaFalando()) {
 
                 falar(
                     "Atenção. Chegando ao destino " + destino
@@ -608,7 +1620,8 @@ document.getElementById("btnSimular").onclick = async function () {
 
             i > 0 &&
             i % 150 === 0 &&
-            !speechSynthesis.speaking
+            !modoCalmoAtivo() &&
+            !vozEstaFalando()
 
         ) {
 
@@ -636,29 +1649,134 @@ document.getElementById("btnSimular").onclick = async function () {
         fatorClima(clima, transporte) /
         fatorTransito();
 
+
     // tempo em horas decimais
-let tempo = dist / vel;
+    let tempo = dist / vel;
 
 
-// converte para horas e minutos
-let horas = Math.floor(tempo);
+    // converte para horas e minutos
+    let horas = Math.floor(tempo);
 
-let minutos = Math.round((tempo - horas) * 60);
+    let minutos = Math.round((tempo - horas) * 60);
 
 
-// texto final formatado
-let tempoFormatado = `${horas}h ${minutos}min`;
+    // texto final formatado
+    let tempoFormatado = `${horas}h ${minutos}min`;
+
+
+    // ==================================================
+    // COMBUSTÍVEL
+    // ==================================================
+
+    let textoCombustivel = "";
+
+
+    if (transporte === "Carro") {
+
+        const precoCombustivel =
+            Number(precoCombustivelEl.value) || 0;
+
+        const litrosGastos =
+            dist / consumoMedioCarroKmPorLitro;
+
+        const valorGasto =
+            litrosGastos * precoCombustivel;
+
+
+        textoCombustivel =
+            ` |
+         ⛽ ${litrosGastos.toFixed(2)} L |
+         💰 R$ ${valorGasto.toFixed(2)}`;
+
+    }
+
+
+    // ==================================================
+    // PASSAGEM DE ÔNIBUS
+    // ==================================================
+
+    let textoPassagem = "";
+
+
+    if (transporte === "Ônibus") {
+
+        const valorPassagem =
+            Number(valorPassagemEl.value) || 0;
+
+        textoPassagem =
+            ` |
+         💳 Passagem R$ ${valorPassagem.toFixed(2)}`;
+
+    }
+
+
+    // ==================================================
+    // TRANSPORTE SUSTENTÁVEL
+    // ==================================================
+
+    let textoSustentavel = "";
+
+
+    if (transporte === "Bicicleta" || transporte === "A pé") {
+
+        textoSustentavel =
+            ` |
+         🌱 Transporte sustentável`;
+
+    }
+
+
+    // ==================================================
+    // SUGESTÃO DE TRANSPORTE
+    // ==================================================
+
+    const precoCombustivelSugestao =
+        Number(precoCombustivelEl.value) || 0;
+
+    const valorPassagemSugestao =
+        Number(valorPassagemEl.value) || tarifaOnibusEstimativa;
+
+    const sugestao =
+        sugerirMelhorTransporte(
+            dist,
+            clima,
+            precoCombustivelSugestao,
+            valorPassagemSugestao
+        );
+
+    const textoSugestao =
+        `<br>
+         💡 Melhor benefício: ${sugestao.icone} ${sugestao.transporte}
+         (${sugestao.motivo})`;
+
+
+    ultimaSugestaoTransporte =
+        `Última sugestão de melhor benefício: ${sugestao.transporte}, ${sugestao.motivo}.`;
 
 
     // ==================================================
     // RESULTADO
     // ==================================================
 
-    document.getElementById("resultado").innerHTML =
+    resultadoEl.innerHTML =
 
         `📏 ${dist.toFixed(2)} km |
          ⏱ ${tempoFormatado} |
-         🚍 ${transporte} |
-         🌦 ${clima}`;
+         ${iconeTransporte(transporte)} ${transporte} |
+         🌦 ${clima}${textoCombustivel}${textoPassagem}${textoSustentavel}
+         ${textoSugestao}`;
 
 };
+
+
+// ======================================================
+// ESTADO INICIAL
+// ======================================================
+
+carregarPreferenciaContraste();
+
+carregarPreferenciaModoCalmo();
+
+atualizarModoOrigem();
+
+atualizarCamposCusto();

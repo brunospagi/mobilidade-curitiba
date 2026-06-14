@@ -11,11 +11,29 @@
     <!-- Faz o site funcionar bem no celular -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
+    <!-- Cor do tema do aplicativo -->
+    <meta name="theme-color" content="#4CAF50">
+
+    <!-- Permite comportamento de aplicativo em celulares -->
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <!-- Permite comportamento de aplicativo no iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+
+    <!-- Nome do aplicativo no iOS -->
+    <meta name="apple-mobile-web-app-title" content="Mobilidade Curitiba">
+
     <!-- Título da aba do navegador -->
     <title>Mobilidade Inteligente - Curitiba PRO</title>
 
+    <!-- Manifesto PWA -->
+    <link rel="manifest" href="manifest.webmanifest">
+
+    <!-- Ícone do aplicativo -->
+    <link rel="apple-touch-icon" href="icons/icon-192.png">
+
     <!-- Importa o arquivo CSS -->
-    <link rel="stylesheet" href="css/estilo.css">
+    <link rel="stylesheet" href="CSS/estilo.css">
 
     <!-- Importa o CSS da biblioteca Leaflet -->
     <link rel="stylesheet"
@@ -39,50 +57,257 @@
 
 
     <!-- ================================================= -->
-    <!-- ÁREA DOS CONTROLES -->
+    <!-- ACESSIBILIDADE -->
     <!-- ================================================= -->
 
-    <section class="controls">
+    <section class="acessibilidade" aria-label="Recursos de acessibilidade">
 
-        <!-- Seleção da origem -->
-        <select id="origem"></select>
+        <!-- Botão que ativa o alto contraste -->
+        <button id="btnContraste" type="button" aria-pressed="false">
 
-        <!-- Seleção do destino -->
-        <select id="destino"></select>
-
-
-        <!-- Seleção do transporte -->
-        <select id="transporte">
-
-            <option>Carro</option>
-
-            <option>Bicicleta</option>
-
-            <option>Ônibus</option>
-
-            <option>A pé</option>
-
-        </select>
-
-
-        <!-- Seleção do clima -->
-        <select id="clima">
-
-            <option>Sol</option>
-
-            <option>Chuva</option>
-
-        </select>
-
-
-        <!-- Botão que inicia a simulação -->
-        <button id="btnSimular">
-
-            Simular rota
+            ◐ Alto contraste
 
         </button>
 
+
+        <!-- Botão que lê as instruções da tela -->
+        <button id="btnLeitura" type="button">
+
+            🔊 Ler instruções
+
+        </button>
+
+
+        <!-- Bloco do modo calmo -->
+        <div class="bloco-acessibilidade">
+
+            <button id="btnModoCalmo" type="button" aria-pressed="false">
+
+               🧩 Modo calmo
+
+            </button>
+
+
+            <small class="descricao-acessibilidade">
+
+                Reduz cores fortes, efeitos visuais e avisos sonoros automáticos.
+
+            </small>
+
+        </div>
+
     </section>
+
+
+    <!-- ================================================= -->
+    <!-- CONVITE PARA INSTALAR O APLICATIVO -->
+    <!-- ================================================= -->
+
+    <section id="conviteInstalacao" class="convite-instalacao oculto" aria-live="polite">
+
+        <div>
+
+            <strong>
+                Instale o app Mobilidade Inteligente - Curitiba
+            </strong>
+
+            <p>
+                Acesse mais rápido pela tela inicial do seu dispositivo.
+            </p>
+
+        </div>
+
+
+        <div class="acoes-instalacao">
+
+            <button id="btnInstalarApp" type="button">
+
+                📲 Instalar app
+
+            </button>
+
+            <button id="btnFecharInstalacao" type="button">
+
+                Agora não
+
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================================================= -->
+    <!-- ÁREA DOS CONTROLES -->
+    <!-- ================================================= -->
+
+    <main class="simulador">
+
+        <!-- Escolha da origem da rota -->
+        <section class="card-controles">
+
+            <h3>
+                De onde você quer sair?
+            </h3>
+
+
+            <!-- Opções de origem -->
+            <div class="origem-opcoes">
+
+                <button id="btnModoPonto" class="opcao-origem ativa" type="button">
+
+                    📍 Escolher um ponto
+
+                </button>
+
+
+                <button id="btnModoLocalizacao" class="opcao-origem" type="button">
+
+                    🧭 Usar minha localização
+
+                </button>
+
+            </div>
+
+
+            <!-- Campo exibido quando a origem é um ponto turístico -->
+            <div id="grupoOrigem" class="grupo-campo">
+
+                <label for="origem">
+                    Origem
+                </label>
+
+                <select id="origem" aria-label="Ponto de origem"></select>
+
+            </div>
+
+
+            <!-- Campo exibido quando a origem é a localização atual -->
+            <div id="grupoLocalizacao" class="grupo-campo oculto">
+
+                <button id="btnLocalizacao" type="button">
+
+                    Liberar minha localização
+
+                </button>
+
+                <small id="statusLocalizacao">
+                    A localização será usada apenas como ponto de partida.
+                </small>
+
+            </div>
+
+        </section>
+
+
+        <!-- Escolha do destino e detalhes da rota -->
+        <section class="card-controles">
+
+            <h3>
+                Para onde você quer ir?
+            </h3>
+
+
+            <div class="linha-campos">
+
+                <!-- Seleção do destino -->
+                <div class="grupo-campo">
+
+                    <label for="destino">
+                        Destino
+                    </label>
+
+                    <select id="destino" aria-label="Ponto de destino"></select>
+
+                </div>
+
+
+                <!-- Seleção do transporte -->
+                <div class="grupo-campo">
+
+                    <label for="transporte">
+                        Transporte
+                    </label>
+
+                    <select id="transporte" aria-label="Meio de transporte">
+
+                        <option>Carro</option>
+
+                        <option>Bicicleta</option>
+
+                        <option>Ônibus</option>
+
+                        <option>A pé</option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- Preço do combustível -->
+                <div id="grupoCombustivel" class="grupo-campo oculto">
+
+                    <label for="precoCombustivel">
+                        Preço do combustível
+                    </label>
+
+                    <input id="precoCombustivel"
+                           type="number"
+                           min="0"
+                           step="0.01"
+                           value="6.00"
+                           aria-label="Preço do combustível por litro">
+
+                </div>
+
+
+                <!-- Valor da passagem -->
+                <div id="grupoPassagem" class="grupo-campo oculto">
+
+                    <label for="valorPassagem">
+                        Valor da passagem
+                    </label>
+
+                    <input id="valorPassagem"
+                           type="number"
+                           min="0"
+                           step="0.01"
+                           value="6.00"
+                           aria-label="Valor da passagem de ônibus">
+
+                </div>
+
+
+                <!-- Seleção do clima -->
+                <div class="grupo-campo">
+
+                    <label for="clima">
+                        Clima
+                    </label>
+
+                    <select id="clima" aria-label="Clima">
+
+                        <option>Sol</option>
+
+                        <option>Chuva</option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <!-- Botão que inicia a simulação -->
+            <button id="btnSimular" class="botao-principal" type="button">
+
+                Simular rota
+
+            </button>
+
+        </section>
+
+    </main>
 
 
     <!-- ================================================= -->
@@ -91,9 +316,9 @@
 
     <section id="painel">
 
-        <div id="resultado">
+        <div id="resultado" aria-live="polite">
 
-            Pronto para simular…
+            Escolha a origem, o destino e simule sua rota.
 
         </div>
 
@@ -104,15 +329,68 @@
     <!-- MAPA -->
     <!-- ================================================= -->
 
-    <div id="map"></div>
+    <div id="map"
+         role="img"
+         aria-label="Mapa interativo com pontos turísticos e rota simulada em Curitiba"></div>
 
 
     <!-- ================================================= -->
     <!-- RODAPÉ -->
     <!-- ================================================= -->
 
-    <footer>
+    <footer class="creditos">
 
+        <!-- Título dos créditos -->
+        <h3>
+            Créditos
+        </h3>
+
+
+        <!-- Informações do projeto -->
+        <p>
+            <strong>ILHA INTERDISCIPLINAR DE RACIONALIDADE (IIR)</strong>
+        </p>
+
+        <p>
+            <strong>Tema:</strong>
+            Mundo Digital – Ensino Fundamental II (6º ao 9º ano)
+        </p>
+
+        <p>
+            <strong>Curso:</strong>
+            Licenciatura em Computação - UTFPR - Câmpus Ponta Grossa
+        </p>
+
+        <p>
+            <strong>Disciplina:</strong>
+            App
+        </p>
+
+
+        <!-- Estudantes -->
+        <p>
+            <strong>Estudantes:</strong>
+        </p>
+
+        <ul>
+
+            <li>BRUNO GABRIEL DOS SANTOS DA SILVA</li>
+
+            <li>CLÁUDIO ANDRÉ SOUZA DA SILVA</li>
+
+            <li>DEISY CARLA ARMSTRONG DA CRUZ HAIDUK</li>
+
+            <li>LEANDRO APARECIDO NEVES</li>
+
+            <li>LUCÉLIA MOREIRA DA SILVA</li>
+
+            <li>MÁRCIO SALES</li>
+
+            <li>SIMONE MATHIAS CASTAMAN</li>
+
+        </ul>
+
+        <!-- Dados do mapa -->
         <small>
 
             Dados do mapa:
@@ -124,6 +402,24 @@
 
 
     <!-- ================================================= -->
+    <!-- ACESSIBILIDADE VLibras -->
+    <!-- ================================================= -->
+
+    <!-- Widget oficial do VLibras -->
+    <div vw class="enabled">
+
+        <div vw-access-button class="active"></div>
+
+        <div vw-plugin-wrapper>
+
+            <div class="vw-plugin-top-wrapper"></div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================================================= -->
     <!-- IMPORTAÇÃO DAS BIBLIOTECAS -->
     <!-- ================================================= -->
 
@@ -131,7 +427,21 @@
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
     <!-- Nosso JavaScript -->
-    <script src="js/app.js"></script>
+    <script src="JS/app.js"></script>
+
+    <!-- Biblioteca do VLibras -->
+    <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
+
+    <!-- Inicialização do VLibras -->
+    <script>
+
+        if (window.VLibras) {
+
+            new window.VLibras.Widget("https://vlibras.gov.br/app");
+
+        }
+
+    </script>
 
 </body>
 </html>
