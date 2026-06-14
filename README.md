@@ -123,3 +123,7 @@ http://localhost:8080
 ## Créditos de dados
 
 Dados do mapa: OpenStreetMap • OSRM
+W3C - HTML - JS - CSS
+WEB.DEV - PWA
+VLibras - GOV
+DOCKER - CONTAINER
