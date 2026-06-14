@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+
+<!-- Define o idioma da página -->
+<html lang="pt-BR">
+
+<head>
+
+    <!-- Define os caracteres especiais -->
+    <meta charset="utf-8">
+
+    <!-- Faz o site funcionar bem no celular -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Título da aba do navegador -->
+    <title>Mobilidade Inteligente - Curitiba PRO</title>
+
+    <!-- Importa o arquivo CSS -->
+    <link rel="stylesheet" href="css/estilo.css">
+
+    <!-- Importa o CSS da biblioteca Leaflet -->
+    <link rel="stylesheet"
+          href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+
+</head>
+
+<body>
+
+    <!-- ================================================= -->
+    <!-- TÍTULO PRINCIPAL -->
+    <!-- ================================================= -->
+
+    <header>
+
+        <h2>
+            Mobilidade Inteligente - Curitiba
+        </h2>
+
+    </header>
+
+
+    <!-- ================================================= -->
+    <!-- ÁREA DOS CONTROLES -->
+    <!-- ================================================= -->
+
+    <section class="controls">
+
+        <!-- Seleção da origem -->
+        <select id="origem"></select>
+
+        <!-- Seleção do destino -->
+        <select id="destino"></select>
+
+
+        <!-- Seleção do transporte -->
+        <select id="transporte">
+
+            <option>Carro</option>
+
+            <option>Bicicleta</option>
+
+            <option>Ônibus</option>
+
+            <option>A pé</option>
+
+        </select>
+
+
+        <!-- Seleção do clima -->
+        <select id="clima">
+
+            <option>Sol</option>
+
+            <option>Chuva</option>
+
+        </select>
+
+
+        <!-- Botão que inicia a simulação -->
+        <button id="btnSimular">
+
+            Simular rota
+
+        </button>
+
+    </section>
+
+
+    <!-- ================================================= -->
+    <!-- PAINEL DE RESULTADOS -->
+    <!-- ================================================= -->
+
+    <section id="painel">
+
+        <div id="resultado">
+
+            Pronto para simular…
+
+        </div>
+
+    </section>
+
+
+    <!-- ================================================= -->
+    <!-- MAPA -->
+    <!-- ================================================= -->
+
+    <div id="map"></div>
+
+
+    <!-- ================================================= -->
+    <!-- RODAPÉ -->
+    <!-- ================================================= -->
+
+    <footer>
+
+        <small>
+
+            Dados do mapa:
+            OpenStreetMap • OSRM
+
+        </small>
+
+    </footer>
+
+
+    <!-- ================================================= -->
+    <!-- IMPORTAÇÃO DAS BIBLIOTECAS -->
+    <!-- ================================================= -->
+
+    <!-- Biblioteca Leaflet -->
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+    <!-- Nosso JavaScript -->
+    <script src="js/app.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,136 @@
+/* ===================================================== */
+/* CONFIGURAÇÕES GERAIS */
+/* ===================================================== */
+
+/* Faz o cálculo de tamanhos funcionar melhor */
+* {
+    box-sizing: border-box;
+}
+
+
+/* ===================================================== */
+/* CORPO DA PÁGINA */
+/* ===================================================== */
+
+body {
+
+    /* remove margens automáticas */
+    margin: 0;
+
+    /* fonte do sistema */
+    font-family: Arial, sans-serif;
+
+    /* cor de fundo */
+    background: #1e1e2f;
+
+    /* cor do texto */
+    color: white;
+
+    /* centraliza textos */
+    text-align: center;
+}
+
+
+/* ===================================================== */
+/* CABEÇALHO */
+/* ===================================================== */
+
+header {
+
+    padding: 10px;
+
+}
+
+
+/* ===================================================== */
+/* ÁREA DOS CONTROLES */
+/* ===================================================== */
+
+.controls {
+
+    margin: 10px;
+
+}
+
+
+/* ===================================================== */
+/* SELECTS E BOTÕES */
+/* ===================================================== */
+
+select,
+button {
+
+    /* espaço interno */
+    padding: 10px;
+
+    /* espaço externo */
+    margin: 5px;
+
+    /* bordas arredondadas */
+    border-radius: 6px;
+
+    /* remove borda padrão */
+    border: none;
+
+    /* tamanho da letra */
+    font-size: 14px;
+}
+
+
+/* ===================================================== */
+/* BOTÃO */
+/* ===================================================== */
+
+button {
+
+    /* cor verde */
+    background: #4CAF50;
+
+    /* texto branco */
+    color: white;
+
+    /* muda cursor */
+    cursor: pointer;
+}
+
+
+/* ===================================================== */
+/* PAINEL DE RESULTADO */
+/* ===================================================== */
+
+#painel {
+
+    margin-top: 10px;
+
+    font-size: 16px;
+}
+
+
+/* ===================================================== */
+/* MAPA */
+/* ===================================================== */
+
+#map {
+
+    /* altura do mapa */
+    height: 520px;
+
+    /* margem externa */
+    margin: 15px;
+
+    /* cantos arredondados */
+    border-radius: 12px;
+}
+
+
+/* ===================================================== */
+/* RODAPÉ */
+/* ===================================================== */
+
+footer {
+
+    margin-bottom: 10px;
+
+    /* deixa o texto mais suave */
+    opacity: 0.7;
+}
