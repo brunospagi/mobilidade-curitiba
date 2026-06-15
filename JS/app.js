@@ -43,6 +43,8 @@ let ultimaSugestaoTransporte = "";
 
 let eventoInstalacaoPwa = null;
 
+let ultimaRotaMapas = null;
+
 
 // ======================================================
 // LISTA DE PARADAS DA LINHA TURISMO
@@ -151,6 +153,8 @@ const climaEl = document.getElementById("clima");
 const btnLocalizacaoEl = document.getElementById("btnLocalizacao");
 
 const btnSimularEl = document.getElementById("btnSimular");
+
+const btnAbrirMapasEl = document.getElementById("btnAbrirMapas");
 
 const resultadoEl = document.getElementById("resultado");
 
@@ -1303,6 +1307,11 @@ function fraseSeguranca(transporte) {
 
 function limparSimulacaoAnterior() {
 
+    ultimaRotaMapas = null;
+
+    atualizarBotaoMapas();
+
+
     if ("speechSynthesis" in window) {
 
         speechSynthesis.cancel();
@@ -1365,6 +1374,82 @@ function buscarCoordenadaOrigem() {
     return pontos[origemEl.value];
 
 }
+
+
+// ======================================================
+// MODO DO TRANSPORTE PARA MAPAS
+// ======================================================
+
+function modoTransporteMapas(transporte) {
+
+    if (transporte === "Carro") return "driving";
+
+    if (transporte === "Bicicleta") return "bicycling";
+
+    if (transporte === "Ônibus") return "transit";
+
+    if (transporte === "A pé") return "walking";
+
+    return "driving";
+
+}
+
+
+// ======================================================
+// MONTA LINK PARA O APLICATIVO DE MAPAS
+// ======================================================
+
+function montarLinkMapas(rota) {
+
+    const origem =
+        `${rota.origem[0]},${rota.origem[1]}`;
+
+    const destino =
+        `${rota.destino[0]},${rota.destino[1]}`;
+
+    const modo =
+        modoTransporteMapas(rota.transporte);
+
+
+    return `https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(origem)}&destination=${encodeURIComponent(destino)}&travelmode=${modo}`;
+
+}
+
+
+// ======================================================
+// ATUALIZA BOTÃO DE MAPAS
+// ======================================================
+
+function atualizarBotaoMapas() {
+
+    btnAbrirMapasEl.classList.toggle("oculto", !ultimaRotaMapas);
+
+}
+
+
+// ======================================================
+// BOTÃO ABRIR MAPAS
+// ======================================================
+
+btnAbrirMapasEl.onclick = function () {
+
+    if (!ultimaRotaMapas) {
+
+        resultadoEl.textContent =
+            "Simule uma rota antes de abrir no aplicativo de mapas.";
+
+        return;
+
+    }
+
+
+    window.open(
+        montarLinkMapas(ultimaRotaMapas),
+        "_blank",
+        "noopener"
+    );
+
+};
 
 
 // ======================================================
@@ -1480,6 +1565,15 @@ btnSimularEl.onclick = async function () {
         return;
 
     }
+
+
+    ultimaRotaMapas = {
+        origem: c1,
+        destino: c2,
+        transporte
+    };
+
+    atualizarBotaoMapas();
 
 
     // ==================================================
