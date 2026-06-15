@@ -524,6 +524,164 @@ select:focus-visible {
 
 
 /* ===================================================== */
+/* ÍCONE PERSONALIZADO DO MAPA */
+/* ===================================================== */
+
+.icone-ponto-mapa {
+
+    /* tamanho do ícone */
+    width: 46px;
+    height: 46px;
+
+    /* formato circular */
+    border-radius: 50%;
+
+    /* fundo claro */
+    background: white;
+
+    /* borda verde */
+    border: 3px solid #4CAF50;
+
+    /* sombra para destacar no mapa */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.35);
+
+    /* esconde excesso da imagem */
+    overflow: hidden;
+
+}
+
+
+/* ===================================================== */
+/* IMAGEM DO ÍCONE PERSONALIZADO */
+/* ===================================================== */
+
+.icone-ponto-mapa img {
+
+    /* ocupa todo o círculo */
+    width: 100%;
+    height: 100%;
+
+    /* evita distorção */
+    object-fit: cover;
+
+    /* acompanha o formato circular */
+    border-radius: 50%;
+
+    /* exibe como bloco */
+    display: block;
+
+}
+
+
+/* ===================================================== */
+/* POPUP DOS PONTOS TURÍSTICOS */
+/* ===================================================== */
+
+.popup-ponto {
+
+    /* largura do popup */
+    width: 240px;
+
+    /* alinha conteúdo */
+    text-align: left;
+
+}
+
+
+/* ===================================================== */
+/* FOTO DO POPUP */
+/* ===================================================== */
+
+.foto-popup-ponto {
+
+    /* largura total */
+    width: 100%;
+
+    /* altura fixa */
+    height: 130px;
+
+    /* recorta sem deformar */
+    object-fit: cover;
+
+    /* cantos arredondados */
+    border-radius: 10px;
+
+    /* espaço abaixo da foto */
+    margin-bottom: 8px;
+
+    /* exibe como bloco */
+    display: block;
+
+}
+
+
+/* ===================================================== */
+/* CONTEÚDO DO POPUP */
+/* ===================================================== */
+
+.conteudo-popup-ponto {
+
+    /* organiza os textos */
+    display: flex;
+
+    /* empilha os textos */
+    flex-direction: column;
+
+    /* espaço entre linhas */
+    gap: 6px;
+
+}
+
+
+/* ===================================================== */
+/* CATEGORIA DO POPUP */
+/* ===================================================== */
+
+.categoria-popup-ponto {
+
+    /* aparência de etiqueta */
+    display: inline-block;
+
+    /* largura ajustada ao texto */
+    width: fit-content;
+
+    /* cor suave */
+    background: #e8f5e9;
+
+    /* texto verde */
+    color: #2e7d32;
+
+    /* espaço interno */
+    padding: 3px 8px;
+
+    /* cantos arredondados */
+    border-radius: 999px;
+
+    /* tamanho menor */
+    font-size: 12px;
+
+}
+
+
+/* ===================================================== */
+/* PARÁGRAFO DO POPUP */
+/* ===================================================== */
+
+.popup-ponto p {
+
+    /* remove margem padrão */
+    margin: 0;
+
+    /* tamanho confortável */
+    font-size: 13px;
+
+    /* altura de linha */
+    line-height: 1.35;
+
+}
+
+
+/* ===================================================== */
 /* RODAPÉ */
 /* ===================================================== */
 
@@ -713,6 +871,29 @@ body.alto-contraste footer {
 
 
 /* ===================================================== */
+/* POPUPS NO ALTO CONTRASTE */
+/* ===================================================== */
+
+body.alto-contraste .icone-ponto-mapa {
+
+    /* borda amarela */
+    border-color: #ffeb3b;
+
+}
+
+
+body.alto-contraste .categoria-popup-ponto {
+
+    /* fundo amarelo */
+    background: #ffeb3b;
+
+    /* texto preto */
+    color: #000;
+
+}
+
+
+/* ===================================================== */
 /* MODO CALMO */
 /* ===================================================== */
 
@@ -762,6 +943,21 @@ body.modo-calmo .botao-mapas {
 
     /* azul suave */
     background: #5d8aa8;
+
+}
+
+
+/* ===================================================== */
+/* ÍCONES NO MODO CALMO */
+/* ===================================================== */
+
+body.modo-calmo .icone-ponto-mapa {
+
+    /* borda verde suave */
+    border-color: #6f9f8d;
+
+    /* sombra mais leve */
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
 
 }
 

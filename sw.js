@@ -1,4 +1,4 @@
-const CACHE_NAME = "mobilidade-curitiba-v1";
+const CACHE_NAME = "mobilidade-curitiba-v3";
 
 const APP_FILES = [
     "./",
@@ -7,7 +7,28 @@ const APP_FILES = [
     "./JS/app.js",
     "./manifest.webmanifest",
     "./icons/icon-192.png",
-    "./icons/icon-512.png"
+    "./icons/icon-512.png",
+    "./fotos/rua-24-horas.png",
+    "./fotos/praca-tiradentes.png",
+    "./fotos/rua-das-flores.png",
+    "./fotos/museu-ferroviario.png",
+    "./fotos/teatro-paiol.png",
+    "./fotos/jardim-botanico.png",
+    "./fotos/mercado-municipal.png",
+    "./fotos/teatro-guaira.png",
+    "./fotos/passeio-publico.png",
+    "./fotos/centro-civico.png",
+    "./fotos/bosque-do-papa.png",
+    "./fotos/opera-de-arame.png",
+    "./fotos/museu-oscar-niemeyer.png",
+    "./fotos/bosque-alemao.png",
+    "./fotos/parque-sao-lourenco.png",
+    "./fotos/parque-tingui.png",
+    "./fotos/parque-barigui.png",
+    "./fotos/parque-tangua.png",
+    "./fotos/santa-felicidade.png",
+    "./fotos/torre-panoramica.png",
+    "./fotos/setor-historico.png"
 ];
 
 

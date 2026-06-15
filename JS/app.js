@@ -109,6 +109,162 @@ const pontos = {
 
 
 // ======================================================
+// INFORMAÇÕES DOS PONTOS TURÍSTICOS
+// ======================================================
+
+const informacoesPontos = {
+
+    "Rua 24 Horas": {
+        foto: "fotos/rua-24-horas.png",
+        categoria: "Compras e gastronomia",
+        horario: "Horário variável conforme lojas e restaurantes",
+        descricao: "Galeria urbana tradicional com serviços, alimentação e circulação de pedestres."
+    },
+
+    "Praça Tiradentes": {
+        foto: "fotos/praca-tiradentes.png",
+        categoria: "História e espaço público",
+        horario: "Espaço aberto",
+        descricao: "Marco histórico central de Curitiba, próximo a construções importantes da cidade."
+    },
+
+    "Rua das Flores": {
+        foto: "fotos/rua-das-flores.png",
+        categoria: "Rua pedestrianizada",
+        horario: "Espaço aberto",
+        descricao: "Calçadão histórico com flores, comércio e circulação segura para pedestres."
+    },
+
+    "Museu Ferroviário": {
+        foto: "fotos/museu-ferroviario.png",
+        categoria: "Museu",
+        horario: "Consulte o horário oficial antes da visita",
+        descricao: "Espaço dedicado à memória ferroviária e ao desenvolvimento urbano ligado aos trilhos."
+    },
+
+    "Teatro Paiol": {
+        foto: "fotos/teatro-paiol.png",
+        categoria: "Cultura",
+        horario: "Conforme programação cultural",
+        descricao: "Teatro histórico conhecido por sua arquitetura circular e apresentações culturais."
+    },
+
+    "Jardim Botânico": {
+        foto: "fotos/jardim-botanico.png",
+        categoria: "Parque e natureza",
+        horario: "Consulte o horário oficial antes da visita",
+        descricao: "Um dos cartões-postais de Curitiba, com estufa, jardins e áreas para caminhada."
+    },
+
+    "Mercado Municipal": {
+        foto: "fotos/mercado-municipal.png",
+        categoria: "Gastronomia e compras",
+        horario: "Horário comercial; consulte funcionamento oficial",
+        descricao: "Mercado tradicional com alimentos, produtos regionais e diversidade gastronômica."
+    },
+
+    "Teatro Guaíra": {
+        foto: "fotos/teatro-guaira.png",
+        categoria: "Cultura",
+        horario: "Conforme programação cultural",
+        descricao: "Importante complexo cultural para teatro, música, dança e eventos artísticos."
+    },
+
+    "Passeio Público": {
+        foto: "fotos/passeio-publico.png",
+        categoria: "Parque urbano",
+        horario: "Consulte o horário oficial antes da visita",
+        descricao: "Parque histórico com áreas verdes, lago, trilhas e espaços de contemplação."
+    },
+
+    "Centro Cívico": {
+        foto: "fotos/centro-civico.png",
+        categoria: "Arquitetura e governo",
+        horario: "Espaços externos abertos; prédios têm horários próprios",
+        descricao: "Região administrativa com arquitetura institucional e importantes espaços públicos."
+    },
+
+    "Bosque do Papa": {
+        foto: "fotos/bosque-do-papa.png",
+        categoria: "Bosque e memória cultural",
+        horario: "Consulte o horário oficial antes da visita",
+        descricao: "Área verde com memória da cultura polonesa e casas tradicionais de madeira."
+    },
+
+    "Museu Oscar Niemeyer": {
+        foto: "fotos/museu-oscar-niemeyer.png",
+        categoria: "Museu e arquitetura",
+        horario: "Consulte o horário oficial antes da visita",
+        descricao: "Museu de arte e design conhecido pela arquitetura marcante em formato de olho."
+    },
+
+    "Bosque Alemão": {
+        foto: "fotos/bosque-alemao.png",
+        categoria: "Bosque e cultura",
+        horario: "Consulte o horário oficial antes da visita",
+        descricao: "Bosque temático com trilhas, mirante e referências à cultura alemã."
+    },
+
+    "Parque São Lourenço": {
+        foto: "fotos/parque-sao-lourenco.png",
+        categoria: "Parque e lazer",
+        horario: "Consulte o horário oficial antes da visita",
+        descricao: "Parque com lago, áreas verdes, ciclovia e espaços culturais."
+    },
+
+    "Ópera de Arame": {
+        foto: "fotos/opera-de-arame.png",
+        categoria: "Cultura e arquitetura",
+        horario: "Consulte o horário oficial antes da visita",
+        descricao: "Teatro de estrutura metálica em meio à natureza, lago e paisagem rochosa."
+    },
+
+    "Parque Tanguá": {
+        foto: "fotos/parque-tangua.png",
+        categoria: "Parque e mirante",
+        horario: "Consulte o horário oficial antes da visita",
+        descricao: "Parque com mirante, jardins, lagos e vista panorâmica."
+    },
+
+    "Parque Tingui": {
+        foto: "fotos/parque-tingui.png",
+        categoria: "Parque e natureza",
+        horario: "Consulte o horário oficial antes da visita",
+        descricao: "Amplo parque com lago, trilhas e áreas de lazer ao ar livre."
+    },
+
+    "Santa Felicidade": {
+        foto: "fotos/santa-felicidade.png",
+        categoria: "Gastronomia e cultura",
+        horario: "Horário variável conforme restaurantes e comércio",
+        descricao: "Bairro conhecido pela tradição gastronômica, cultura italiana e restaurantes."
+    },
+
+    "Parque Barigui": {
+        foto: "fotos/parque-barigui.png",
+        categoria: "Parque e lazer",
+        horario: "Espaço aberto; consulte regras locais",
+        descricao: "Um dos parques mais frequentados da cidade, com lago, pistas e áreas verdes."
+    },
+
+    "Torre Panorâmica": {
+        foto: "fotos/torre-panoramica.png",
+        categoria: "Mirante",
+        horario: "Consulte o horário oficial antes da visita",
+        descricao: "Mirante urbano para observar Curitiba de cima e compreender a paisagem da cidade."
+    },
+
+    "Setor Histórico": {
+        foto: "fotos/setor-historico.png",
+        categoria: "História e cultura",
+        horario: "Espaço aberto; atrações têm horários próprios",
+        descricao: "Região com casario antigo, memória urbana, cultura e espaços de convivência."
+    }
+
+};
+
+
+// ======================================================
 // ELEMENTOS DA TELA
 // ======================================================
 
@@ -601,11 +757,87 @@ L.tileLayer(
 // MARCADORES TURÍSTICOS
 // ======================================================
 
+function montarPopupPonto(nome) {
+
+    const info =
+        informacoesPontos[nome];
+
+
+    if (!info) {
+
+        return `<strong>${nome}</strong>`;
+
+    }
+
+
+    return `
+        <article class="popup-ponto">
+            <img src="${info.foto}" alt="Ilustração de ${nome}" class="foto-popup-ponto">
+
+            <div class="conteudo-popup-ponto">
+
+                <strong>${nome}</strong>
+
+                <span class="categoria-popup-ponto">
+                    ${info.categoria}
+                </span>
+
+                <p>
+                    ${info.descricao}
+                </p>
+
+                <small>
+                    <strong>Horário:</strong>
+                    ${info.horario}
+                </small>
+
+            </div>
+        </article>
+    `;
+
+}
+
+
+function criarIconePonto(nome) {
+
+    const info =
+        informacoesPontos[nome];
+
+
+    if (!info) {
+
+        return undefined;
+
+    }
+
+
+    return L.divIcon({
+
+        html: `
+            <div class="icone-ponto-mapa">
+                <img src="${info.foto}" alt="">
+            </div>
+        `,
+
+        className: "",
+        iconSize: [46, 46],
+        iconAnchor: [23, 46],
+        popupAnchor: [0, -42]
+
+    });
+
+}
+
+
 Object.keys(pontos).forEach(nome => {
 
-    L.marker(pontos[nome])
+    L.marker(pontos[nome], {
+
+        icon: criarIconePonto(nome)
+
+    })
         .addTo(map)
-        .bindPopup(nome);
+        .bindPopup(montarPopupPonto(nome));
 
 });
 

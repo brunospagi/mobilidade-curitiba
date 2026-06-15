@@ -8,5 +8,6 @@ COPY sw.js /usr/share/nginx/html/sw.js
 COPY CSS /usr/share/nginx/html/CSS
 COPY JS /usr/share/nginx/html/JS
 COPY icons /usr/share/nginx/html/icons
+COPY fotos /usr/share/nginx/html/fotos
 
 EXPOSE 80
