@@ -284,6 +284,12 @@ const btnInstalarAppEl = document.getElementById("btnInstalarApp");
 
 const btnFecharInstalacaoEl = document.getElementById("btnFecharInstalacao");
 
+const avisoCookiesEl = document.getElementById("avisoCookies");
+
+const btnAceitarCookiesEl = document.getElementById("btnAceitarCookies");
+
+const btnLimparCacheEl = document.getElementById("btnLimparCache");
+
 const btnContrasteEl = document.getElementById("btnContraste");
 
 const btnLeituraEl = document.getElementById("btnLeitura");
@@ -319,6 +325,103 @@ const chaveContraste = "mobilidadeAltoContraste";
 const chaveModoCalmo = "mobilidadeModoCalmo";
 
 const chaveConviteInstalacao = "mobilidadeConviteInstalacaoFechado";
+
+const chaveAvisoCookies = "mobilidadeAvisoCookiesAceito";
+
+const chaveUltimaLimpezaCache = "mobilidadeUltimaLimpezaCache";
+
+const chaveUltimaVerificacaoCache = "mobilidadeUltimaVerificacaoCache";
+
+const cacheAtualApp = "mobilidade-curitiba-v5";
+
+const intervaloLimpezaCache = 1000 * 60 * 60 * 24 * 7;
+
+const intervaloVerificacaoCache = 1000 * 60 * 60 * 6;
+
+
+// ======================================================
+// LÊ ARMAZENAMENTO LOCAL COM SEGURANÇA
+// ======================================================
+
+function lerArmazenamento(chave) {
+
+    try {
+
+        return localStorage.getItem(chave);
+
+    } catch (erro) {
+
+        return null;
+
+    }
+
+}
+
+
+// ======================================================
+// SALVA ARMAZENAMENTO LOCAL COM SEGURANÇA
+// ======================================================
+
+function salvarArmazenamento(chave, valor) {
+
+    try {
+
+        localStorage.setItem(chave, valor);
+
+    } catch (erro) {
+
+        console.warn("Não foi possível salvar dados no armazenamento local.");
+
+    }
+
+}
+
+
+// ======================================================
+// LIMPA CACHES ANTIGOS
+// ======================================================
+
+async function limparCachesAntigos() {
+
+    if (!("caches" in window)) return;
+
+    const chaves =
+        await caches.keys();
+
+
+    await Promise.all(
+
+        chaves
+            .filter(chave => chave.startsWith("mobilidade-curitiba-"))
+            .filter(chave => chave !== cacheAtualApp)
+            .map(chave => caches.delete(chave))
+
+    );
+
+}
+
+
+// ======================================================
+// LIMPA TODO O CACHE DO APP
+// ======================================================
+
+async function limparCacheAplicativo() {
+
+    if (!("caches" in window)) return;
+
+    const chaves =
+        await caches.keys();
+
+
+    await Promise.all(
+
+        chaves
+            .filter(chave => chave.startsWith("mobilidade-curitiba-"))
+            .map(chave => caches.delete(chave))
+
+    );
+
+}
 
 
 // ======================================================
@@ -366,7 +469,7 @@ function mostrarConviteInstalacao() {
 
     if (appJaInstalado()) return;
 
-    if (localStorage.getItem(chaveConviteInstalacao) === "true") return;
+    if (lerArmazenamento(chaveConviteInstalacao) === "true") return;
 
     conviteInstalacaoEl.classList.remove("oculto");
 
@@ -432,7 +535,7 @@ btnInstalarAppEl.onclick = async function () {
 
 btnFecharInstalacaoEl.onclick = function () {
 
-    localStorage.setItem(chaveConviteInstalacao, "true");
+    salvarArmazenamento(chaveConviteInstalacao, "true");
 
     esconderConviteInstalacao();
 
@@ -453,10 +556,139 @@ window.addEventListener("appinstalled", () => {
 
 
 // ======================================================
+// MOSTRA AVISO DE COOKIES
+// ======================================================
+
+function mostrarAvisoCookies() {
+
+    if (lerArmazenamento(chaveAvisoCookies) === "true") return;
+
+    avisoCookiesEl.classList.remove("oculto");
+
+}
+
+
+// ======================================================
+// ESCONDE AVISO DE COOKIES
+// ======================================================
+
+function esconderAvisoCookies() {
+
+    avisoCookiesEl.classList.add("oculto");
+
+}
+
+
+// ======================================================
+// BOTÃO ACEITAR COOKIES
+// ======================================================
+
+btnAceitarCookiesEl.onclick = function () {
+
+    salvarArmazenamento(chaveAvisoCookies, "true");
+
+    esconderAvisoCookies();
+
+};
+
+
+// ======================================================
+// BOTÃO LIMPAR CACHE
+// ======================================================
+
+btnLimparCacheEl.onclick = async function () {
+
+    await limparCacheAplicativo();
+
+    salvarArmazenamento(chaveUltimaLimpezaCache, String(Date.now()));
+
+    resultadoEl.textContent =
+        "Cache limpo. A página será recarregada para buscar os arquivos mais recentes.";
+
+    setTimeout(() => {
+
+        window.location.reload();
+
+    }, 900);
+
+};
+
+
+// ======================================================
+// VERIFICA ATUALIZAÇÕES DO SERVICE WORKER
+// ======================================================
+
+async function verificarAtualizacaoServiceWorker() {
+
+    if (!("serviceWorker" in navigator)) return;
+
+    const ultimaVerificacao =
+        Number(lerArmazenamento(chaveUltimaVerificacaoCache)) || 0;
+
+    const agora =
+        Date.now();
+
+
+    if (agora - ultimaVerificacao < intervaloVerificacaoCache) return;
+
+
+    const registro =
+        await navigator.serviceWorker.getRegistration();
+
+
+    if (registro) {
+
+        await registro.update();
+
+    }
+
+
+    salvarArmazenamento(chaveUltimaVerificacaoCache, String(agora));
+
+}
+
+
+// ======================================================
+// MANUTENÇÃO AUTOMÁTICA DO CACHE
+// ======================================================
+
+async function fazerManutencaoCache() {
+
+    const ultimaLimpeza =
+        Number(lerArmazenamento(chaveUltimaLimpezaCache)) || 0;
+
+    const agora =
+        Date.now();
+
+
+    if (agora - ultimaLimpeza >= intervaloLimpezaCache) {
+
+        await limparCachesAntigos();
+
+        salvarArmazenamento(chaveUltimaLimpezaCache, String(agora));
+
+    }
+
+
+    await verificarAtualizacaoServiceWorker();
+
+}
+
+
+// ======================================================
 // CONVITE AO ABRIR A PÁGINA
 // ======================================================
 
 window.addEventListener("load", () => {
+
+    mostrarAvisoCookies();
+
+    fazerManutencaoCache()
+        .catch(() => {
+
+            console.warn("Não foi possível executar a manutenção automática do cache.");
+
+        });
 
     setTimeout(() => {
 
@@ -506,7 +738,7 @@ function alternarAltoContraste() {
 
     try {
 
-        localStorage.setItem(chaveContraste, String(ativo));
+        salvarArmazenamento(chaveContraste, String(ativo));
 
     } catch (erro) {
 
@@ -538,7 +770,7 @@ function carregarPreferenciaContraste() {
     try {
 
         const ativo =
-            localStorage.getItem(chaveContraste) === "true";
+            lerArmazenamento(chaveContraste) === "true";
 
         aplicarAltoContraste(ativo);
 
@@ -602,7 +834,7 @@ function alternarModoCalmo() {
 
     try {
 
-        localStorage.setItem(chaveModoCalmo, String(ativo));
+        salvarArmazenamento(chaveModoCalmo, String(ativo));
 
     } catch (erro) {
 
@@ -634,7 +866,7 @@ function carregarPreferenciaModoCalmo() {
     try {
 
         const ativo =
-            localStorage.getItem(chaveModoCalmo) === "true";
+            lerArmazenamento(chaveModoCalmo) === "true";
 
         aplicarModoCalmo(ativo);
 

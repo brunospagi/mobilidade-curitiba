@@ -181,6 +181,81 @@ header {
 
 
 /* ===================================================== */
+/* AVISO DE COOKIES */
+/* ===================================================== */
+
+.aviso-cookies {
+
+    /* organiza o aviso */
+    display: flex;
+
+    /* permite quebrar linha */
+    flex-wrap: wrap;
+
+    /* alinha os elementos */
+    align-items: center;
+
+    /* distribui texto e botões */
+    justify-content: space-between;
+
+    /* espaço entre elementos */
+    gap: 12px;
+
+    /* largura máxima */
+    max-width: 1120px;
+
+    /* centraliza o aviso */
+    margin: 0 auto 16px;
+
+    /* espaço interno */
+    padding: 14px 16px;
+
+    /* fundo discreto */
+    background: rgba(255, 255, 255, 0.1);
+
+    /* borda suave */
+    border: 1px solid rgba(255, 255, 255, 0.18);
+
+    /* cantos arredondados */
+    border-radius: 14px;
+
+    /* texto alinhado */
+    text-align: left;
+
+}
+
+
+/* ===================================================== */
+/* TEXTO DO AVISO DE COOKIES */
+/* ===================================================== */
+
+.aviso-cookies p {
+
+    /* margem compacta */
+    margin: 4px 0 0;
+
+}
+
+
+/* ===================================================== */
+/* AÇÕES DO AVISO DE COOKIES */
+/* ===================================================== */
+
+.acoes-cookies {
+
+    /* organiza os botões */
+    display: flex;
+
+    /* permite quebrar linha */
+    flex-wrap: wrap;
+
+    /* espaço entre botões */
+    gap: 8px;
+
+}
+
+
+/* ===================================================== */
 /* ÁREA DO SIMULADOR */
 /* ===================================================== */
 

@@ -9,5 +9,6 @@ COPY CSS /usr/share/nginx/html/CSS
 COPY JS /usr/share/nginx/html/JS
 COPY icons /usr/share/nginx/html/icons
 COPY fotos /usr/share/nginx/html/fotos
+COPY vendor /usr/share/nginx/html/vendor
 
 EXPOSE 80

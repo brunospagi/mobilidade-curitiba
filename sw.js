@@ -1,10 +1,15 @@
-const CACHE_NAME = "mobilidade-curitiba-v3";
+const CACHE_NAME = "mobilidade-curitiba-v5";
 
 const APP_FILES = [
     "./",
     "./index.html",
     "./CSS/estilo.css",
     "./JS/app.js",
+    "./vendor/leaflet/leaflet.css",
+    "./vendor/leaflet/leaflet.js",
+    "./vendor/leaflet/images/marker-icon.png",
+    "./vendor/leaflet/images/marker-icon-2x.png",
+    "./vendor/leaflet/images/marker-shadow.png",
     "./manifest.webmanifest",
     "./icons/icon-192.png",
     "./icons/icon-512.png",
@@ -38,6 +43,7 @@ self.addEventListener("install", event => {
 
         caches.open(CACHE_NAME)
             .then(cache => cache.addAll(APP_FILES))
+            .then(() => self.skipWaiting())
 
     );
 
@@ -56,6 +62,7 @@ self.addEventListener("activate", event => {
                     .map(key => caches.delete(key))
 
             ))
+            .then(() => self.clients.claim())
 
     );
 

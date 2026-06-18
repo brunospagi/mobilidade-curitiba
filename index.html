@@ -35,9 +35,9 @@
     <!-- Importa o arquivo CSS -->
     <link rel="stylesheet" href="CSS/estilo.css">
 
-    <!-- Importa o CSS da biblioteca Leaflet -->
+    <!-- Importa o CSS local da biblioteca Leaflet -->
     <link rel="stylesheet"
-          href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+          href="vendor/leaflet/leaflet.css"/>
 
 </head>
 
@@ -129,6 +129,44 @@
             <button id="btnFecharInstalacao" type="button">
 
                 Agora não
+
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================================================= -->
+    <!-- AVISO DE COOKIES E ARMAZENAMENTO -->
+    <!-- ================================================= -->
+
+    <section id="avisoCookies" class="aviso-cookies oculto" aria-live="polite">
+
+        <div>
+
+            <strong>
+                🍪 Aviso de cookies e armazenamento
+            </strong>
+
+            <p>
+                Usamos armazenamento local e cache para salvar preferências, melhorar a experiência e permitir funcionamento como aplicativo.
+            </p>
+
+        </div>
+
+
+        <div class="acoes-cookies">
+
+            <button id="btnAceitarCookies" type="button">
+
+                Aceitar
+
+            </button>
+
+            <button id="btnLimparCache" type="button">
+
+                Limpar cache
 
             </button>
 
@@ -431,8 +469,8 @@
     <!-- IMPORTAÇÃO DAS BIBLIOTECAS -->
     <!-- ================================================= -->
 
-    <!-- Biblioteca Leaflet -->
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <!-- Biblioteca Leaflet local -->
+    <script src="vendor/leaflet/leaflet.js"></script>
 
     <!-- Nosso JavaScript -->
     <script src="JS/app.js"></script>
